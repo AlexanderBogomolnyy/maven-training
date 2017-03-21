@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <description>
+        Task 02.
+        Create project with 2 types of test - ITest and simple test.
+        Configure maven to run build without ITests. Create profile to run build
+        with ITests, only ITests. Use maven properties to configure ITest name
+        convention.
+    </description>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>test-runner</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <artifactId>maven-training</artifactId>
+        <groupId>ua.training.maven.training</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <name>test-runner</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <surefire-plugin.version>2.19.1</surefire-plugin.version>
+        <ITest.name.convention>**/I*Test.java</ITest.name.convention>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>${ITest.name.convention}</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>only-with-integration-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${surefire-plugin.version}</version>
+                        <configuration combine.self="override">
+                            <includes>
+                                <include>${ITest.name.convention}</include>
+                            </includes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
